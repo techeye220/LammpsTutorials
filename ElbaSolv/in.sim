@@ -1,0 +1,67 @@
+units real
+
+# Setting up atom and pair_style
+atom_style hybrid molecular dipole sphere
+pair_style lj/sf/dipole/sf 0.0 1.0 1.0 12.0
+
+# Read in configuration and force field information
+read_data data.box_equilibrated
+include   forcefield.elba
+
+# Define a group for the central molecule
+group centralwat type 2
+group otherwat   type 1
+
+# Setup various variables
+variable deltaL     equal 0.04                       # resolution of Lambda (L) window
+variable Nwinequil  equal 2.5e3                      # num equilibration steps / window
+variable Nwinsample equal 3.5e4                      # num sampling steps / window
+variable Nwintot    equal ${Nwinequil}+${Nwinsample}
+variable Nruntot    equal ${Nwintot}/${deltaL}       # tot num steps
+variable Ne         equal 50                         # "Nevery" in LAMMPS doc
+variable Nr         equal ${Nwinsample}/${Ne}        # "Nrepeat" in LAMMPS doc
+variable Nf         equal ${Nwintot}                 # "Nfreq" in LAMMPS doc
+variable Ndump      equal ${Nruntot}/50              # step frequency for dump
+
+velocity all create 298 1234
+
+# Set up neighbor list and timestep
+neighbor 1 bin
+neigh_modify every 1 delay 0 check yes
+timestep 10.0
+
+# Set up integrator, thermostat and barostat
+fix integrator all nve/sphere update dipole
+fix thermostat all langevin 298 298 1000 9 omega yes zero yes
+fix zeroMom    all momentum 500 linear 1 1 1
+fix barostat   all press/berendsen iso 1.0 1.0 100 modulus 21740
+# Keep the central atom slightly restrain to the centre of the box
+fix fixbeads   centralwat spring/self 5.0 xyz
+
+
+# Define dynamic variables
+variable stepNow equal step # get current timestep
+# set Lambda (L) so that it changes stepwise from 0 to (1-deltaL):
+variable L       equal (floor((v_stepNow-1)/v_Nwintot)*v_deltaL)
+# evaluate scaling function f(Lambda) and its derivative:
+variable fL      equal (1-v_L)*(1-v_L)*(1-v_L)*(1-v_L)
+variable dfL     equal -4*(1-v_L)*(1-v_L)*(1-v_L)
+
+# Scale solute-solvent interaction parameters according to f(Lambda):
+fix adaptSS all adapt 1 pair lj/sf/dipole/sf epsilon 1 2 v_fL &
+	                    pair lj/sf/dipole/sf scale   1 2 v_fL scale yes
+
+# Compute and average the derivative of PotEngSS with respect to Lambda:
+compute  PotEngSS  centralwat group/group otherwat pair yes
+variable dPotEngSS equal c_PotEngSS*v_dfL/v_fL
+fix dPotEngSS all ave/time ${Ne} ${Nr} ${Nf} v_L v_dPotEngSS file out.dPotEngSS
+
+# Modify output
+thermo_style custom step temp press pe vol 
+thermo_modify flush yes
+thermo ${Nf}
+dump  dumpdcd all dcd ${Nf} sim.dcd
+
+# Run the simulation
+run ${Nruntot}
+

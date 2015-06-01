@@ -1,0 +1,6 @@
+#   atomType  mass 
+mass    1   40.000  # wat
+
+# Lennard-Jones coefficients:
+#           iType jType	  eps_ij sig_ij 
+pair_coeff    1    1	  0.550  3.050 # wat-wat

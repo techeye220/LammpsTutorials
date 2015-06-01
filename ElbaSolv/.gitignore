@@ -1,0 +1,7 @@
+
+data.box_equilibrated
+*.dcd
+out*
+leapcom
+leap.log
+log.lammps

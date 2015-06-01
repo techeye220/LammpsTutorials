@@ -1,0 +1,40 @@
+units real
+
+# Setting up atom and pair_style
+atom_style hybrid molecular dipole sphere
+pair_style lj/sf/dipole/sf 0.0 1.0 1.0 12.0
+
+# Read in configuration and force field information
+read_data data.box_elba
+include   forcefield.elba
+
+# Define a group for the central molecule
+group centralwat type 2
+
+velocity all create 298 1234
+
+# Set up neighbor list and timestep
+neighbor 1 bin
+neigh_modify every 1 delay 0 check yes
+timestep 10.0
+
+# Set up integrator, thermostat and barostat
+fix integrator all nve/sphere update dipole
+fix thermostat all langevin 298 298 1000 9 omega yes zero yes
+fix zeroMom    all momentum 500 linear 1 1 1
+fix barostat   all press/berendsen iso 1.0 1.0 100 modulus 21740
+# Keep the central atom slightly restrain to the centre of the box
+fix fixbeads   centralwat spring/self 5.0 xyz
+
+# Modify output
+thermo_style custom step temp press pe vol 
+thermo_modify flush yes
+thermo 500
+dump  dumpdcd all dcd 500 equil.dcd
+
+# Run the simulation
+run 50000
+
+# Write a datafile for further simulations
+write_data data.box_equilibrated
+
