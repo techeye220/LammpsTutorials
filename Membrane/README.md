@@ -221,4 +221,12 @@ Finally, we will run a 50 ns simulation where we will output some interesting da
 Some output will be realised through a combination of variables and fixes and a trajectory will be written out with the *dump* command. These commands are rather complicated and can be studied in detail in the LAMMPS manual. In short, we will create a range of files with number density for the different beads and we will output the area and volume per lipid.
 
 
+### Running and analysing the simulation
+
+To run LAMMPS using 8 processors type
+
+    mpirun -np 8 ${LMPDIR}/src/lmp_soton < in.sim
+
+where `$LMPDIR` is the installation directory of LAMMPS.
+
 
