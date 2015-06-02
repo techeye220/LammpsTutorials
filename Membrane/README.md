@@ -1,6 +1,6 @@
 # Simulation of a DOPC membrane with the ELBA potential
 
-This simulation describes how to simulate and analyse a simulation of a DOPC membrane described with the ELBA potential using the [LAMMPS software](http://lammps.sandia.gov/). 
+This tutorial describes how to simulate and analyse a simulation of a DOPC membrane described with the ELBA potential using the [LAMMPS software](http://lammps.sandia.gov/). 
 
 It is intended for new users and such I will go into depth on how LAMMPS works. To this end, I will make extensive references to the LAMMPS [Manual](http://lammps.sandia.gov/doc/Manual.html).
 
@@ -159,9 +159,11 @@ The first piece of action takes place with the command
 
 that tell LAMMPS to minimise the system for 100 steps. You can read more about the command [here](http://lammps.sandia.gov/doc/minimize.html)
 
-After that we will run a short simulation in the NVT ensemble. Therefore, we need to set and integrator and a thermostat. This is accomplished in LAMMPS through so-called [*fixes*](http://lammps.sandia.gov/doc/fix.html) that are actions performed on a selection of atoms every timestep.
+After that we will run a short simulation in the NVT ensemble. Therefore, we need to set and integrator and a thermostat. This is accomplished in LAMMPS through so-called [*fixes*](http://lammps.sandia.gov/doc/fix.html) that are actions performed on a selection of atoms every timestep. The general formula for a fix command is
 
-The lines
+    fix *name* *atom_selection* *name_of_fix* *settings*
+
+Therefore, the lines
 
     fix   integrate all nve/sphere update dipole
     fix   thermo all langevin 303 303 1000 9 omega yes zero yes
@@ -180,7 +182,7 @@ After the NVT ensemble, we want to run a short equilibration in the NPT ensemble
 
 As you see it is very easy to run several simulations after each other in LAMMPS without the need to create several input files.
 
-Finally, we will run a 50 ns simulation where we will output some interesting data for analysis. 
+Finally, we will run a 10 ns simulation where we will output some interesting data for analysis. 
 
 Some output will be realised through a combination of variables and fixes and a trajectory will be written out with the *dump* command. These commands are rather complicated and can be studied in detail in the LAMMPS manual. In short, we will create a range of files with number density for the different beads and we will output the area and volume per lipid.
 
@@ -195,8 +197,8 @@ where `$LMPDIR` is the installation directory of LAMMPS. It will take a couple o
 
 It will produce a number of output files. `apl.dat` and `vpl.dat` contains the trajectory of the area and volume per lipid. You can average them with a simple script that is provided
 
-    python python av.py < apl.dat
-    python python av.py < vpl.dat
+    python av.py < apl.dat
+    python av.py < vpl.dat
 
 (this script assumes you have Numpy installed).
 
