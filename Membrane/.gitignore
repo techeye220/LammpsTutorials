@@ -4,6 +4,7 @@ dopc_elba.gro
 dopc_elba.pdb
 log.lammps
 numDens*
+out.sim
 restart*
 sim.dcd
 vpl.dat

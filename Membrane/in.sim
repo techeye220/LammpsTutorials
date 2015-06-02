@@ -74,7 +74,7 @@ fix 		boxVol all ave/time 1 1 2 v_boxVol file vpl.dat
 restart         500 restart.sim_a restart.sim_b
 dump            dumpdcd all dcd 500 sim.dcd
 
-# Now run a 50 ns production run
-run		5000000
+# Now run a 10 ns production run
+run		1000000
 
 

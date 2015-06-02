@@ -1,46 +1,10 @@
 # Simulation of a DOPC membrane with the ELBA potential
 
-This simulation describes how to simulate and analyse a simulations of a DOPC membrane described with the ELBA potential using the [LAMMPS software](http://lammps.sandia.gov/). 
+This simulation describes how to simulate and analyse a simulation of a DOPC membrane described with the ELBA potential using the [LAMMPS software](http://lammps.sandia.gov/). 
 
 It is intended for new users and such I will go into depth on how LAMMPS works. To this end, I will make extensive references to the LAMMPS [Manual](http://lammps.sandia.gov/doc/Manual.html).
 
-It is assumed that you have downloaded the `Scripts` repository from my Github account. This can be accomplished with
-
-    git clone https://github.com/SGenheden/Scripts
-
-In the tutorial, I will refer to the location of the `Scripts` folder with `$SCRIPTS`.
-
-### Installing LAMMPS
-
-We will start with installing LAMMPS. We will use my own version of LAMMPS hosted on Github. It contains some of my modifications to the code and although they are not necessary for this tutorial, it will be required by other ELBA tutorials. 
-
-Clone my lammps repository from Git hub
-
-    git clone https://github.com/SGenheden/lammps
-
-Next, we will install the colvars library that is needed for some simulations
-
-    cd lammps/lib/colvars 
-    make -f Makefile.g++
-
-Now we are ready to install LAMMPS. By default LAMMPS will only contain a limited set of functional. The rest of the functionality can be accessed by installing a set of packages. You can read more about packages [here](http://lammps.sandia.gov/doc/Section_start.html#start_3). Therefore, we will start to add the necessary packages for ELBA simulations
-
-    cd ../../src
-    make yes-dipole yes-kspace yes-manybody yes-misc yes-molecule yes-rigid yes-user-colvars
-    cp USER-MISC/angle_dipole.* USER-MISC/pair_lj_charmm_coul_long_14.* USER-MISC/pair_lj_sf_dipole_sf.* .
-
-The last command add a few bits from the USER-MISC package. This is a large package with user-contributed code and it is unnecessary to install all of it.
-
-To compile LAMMPS we need an appropriate make file. One that work with the OpenMPI and Intell compilers on Southampton machines/clusters can be found in this repository. Copy the file `Makefile.soton` to the `lammps/src/MAKE` folder and then execute
-
-    make -j 8 soton
-
-The installation should end with something like this
-
-    size ../lmp_soton
-       text	   data	    bss	    dec	    hex	filename
-    8478121	 176400	  18176	8672697	 8455b9	../lmp_soton
-
+It is assumed that you have downloaded the `Scripts` repository from my Github account to a location referred to as `$SCRIPTS`. It is also assumed that you have installed my copy of LAMMPS to a location referred to as `$LMPDIR`. Both of these things are described in the parent README file.
 
 ### LAMMPS input
 
@@ -227,6 +191,23 @@ To run LAMMPS using 8 processors type
 
     mpirun -np 8 ${LMPDIR}/src/lmp_soton < in.sim
 
-where `$LMPDIR` is the installation directory of LAMMPS.
+where `$LMPDIR` is the installation directory of LAMMPS. It will take a couple of hours to complete.
+
+It will produce a number of output files. `apl.dat` and `vpl.dat` contains the trajectory of the area and volume per lipid. You can average them with a simple script that is provided
+
+    python python av.py < apl.dat
+    python python av.py < vpl.dat
+
+(this script assumes you have Numpy installed).
+
+Furthermore, the simulation will produce a number of files starting with `numDens`. These are number densities for the different bead types along the membrane normal. You can copy them into an Excel sheet an plot them to see the density profile of the membrane.
+
+Finally, you can visualise the entire trajectory with VMD using
+
+    vmd dopc_elba.pdb sim.dcd
+
+as you will notice the lipids are broken over the central simulation box and thus you will see very long bonds drawn in VMD. It is therefore best to use a VDW representation of the beads.
+
+This tutorial has now showed you how to setup a simple membrane simulation LAMMPS. It has showed you what the different pieces of input are and how to prepare and understand them. Finally, it has showed you some simple and straightforward analysis.
 
 
