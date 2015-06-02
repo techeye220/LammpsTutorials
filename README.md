@@ -4,8 +4,8 @@ This repositoty contains LAMMPS tutorials for simulations with the ELBA model.
 
 For now it contains the following tutorials
 
-1.) Membrane - simulation of a DOPC membrane with the ELBA potential
-2.) ElbaSolv - solvation free energy calculation of an ELBA water in a box of ELBA water molecules
+1. Membrane - simulation of a DOPC membrane with the ELBA potential
+2. ElbaSolv - solvation free energy calculation of an ELBA water in a box of ELBA water molecules
 
 
 
