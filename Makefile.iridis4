@@ -35,8 +35,8 @@ LMP_INC =	-DLAMMPS_GZIP
 # PATH = path for MPI library
 # LIB = name of MPI library
 
-MPI_INC = -I/local/software/openmpi/1.6.4/intel/include/      
-MPI_PATH = -L/local/software/openmpi/1.6.4/intel/lib/
+MPI_INC = -I/local/software/openmpi/1.6.4/intel-ofed-2.0/include/      
+MPI_PATH = -L/local/software/openmpi/1.6.4/intel-ofed-2.0/lib/
 MPI_LIB = -lmpi -lpthread	
 
 # FFT library, OPTIONAL
