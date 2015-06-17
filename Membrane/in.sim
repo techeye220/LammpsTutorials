@@ -47,19 +47,19 @@ run		50000
 # Now we will do production, so let's turn on some output
 
 # Density profiles
-fix 	numDensLip lip ave/spatial 2 50000 5000000 z center 1 & 
+fix 	numDensLip lip ave/spatial 2 50000 1000000 z center 1 & 
 		density/number units box file numDensLip.dat
-fix 	numDensWat wat ave/spatial 2 50000 5000000 z center 1 & 
+fix 	numDensWat wat ave/spatial 2 50000 1000000 z center 1 & 
 		density/number units box file numDensWat.dat
-fix 	numDensChol chol ave/spatial 2 50000 5000000 z center 1 & 
+fix 	numDensChol chol ave/spatial 2 50000 1000000 z center 1 & 
 		density/number units box file numDensChol.dat
-fix 	numDensPhos phos ave/spatial 2 50000 5000000 z center 1 & 
+fix 	numDensPhos phos ave/spatial 2 50000 1000000 z center 1 & 
 		density/number units box file numDensPhos.dat
-fix 	numDensGly gly ave/spatial 2 50000 5000000 z center 1 & 
+fix 	numDensGly gly ave/spatial 2 50000 1000000 z center 1 & 
 		density/number units box file numDensGly.dat
-fix 	numDensEst est ave/spatial 2 50000 5000000 z center 1 & 
+fix 	numDensEst est ave/spatial 2 50000 1000000 z center 1 & 
 		density/number units box file numDensEst.dat
-fix 	numDensTail tail ave/spatial 2 50000 5000000 z center 1 & 
+fix 	numDensTail tail ave/spatial 2 50000 1000000 z center 1 & 
 		density/number units box file numDensTail.dat 
 
 # compute and average area pear lipid (APL):
