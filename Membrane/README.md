@@ -101,12 +101,12 @@ You saw in the beginning of the datafile that we defined 6 atom types, 5 bond ty
 
 The first lines of this file
 
-    pair_style lj/sf/dipole/sf 0.0 1.0 1.0 12.0
+    pair_style lj/sf/dipole/sf 12.0
     special_bonds lj/coul 0.0 1.0 1.0
     bond_style harmonic
     angle_style hybrid cosine/squared dipole
 
-set the "style" of the pair, bond and angle potential, i.e. what mathematical form they will take. The pair style will be a shifted-force Lennard-Jones for the van der Waals interaction and a shifted-force dipole/charge potential for the electrostatics. The `0.0 1.0 1.0` numbers indicate scaling of 1-2, 1-3 and 1-4 interactions whereas the final `12.0` sets the non-bonded cut-off to 12 A. You can read more about pair styles [here](http://lammps.sandia.gov/doc/pair_style.html)
+set the "style" of the pair, bond and angle potential, i.e. what mathematical form they will take. The pair style will be a shifted-force Lennard-Jones for the van der Waals interaction and a shifted-force dipole/charge potential for the electrostatics. The final `12.0` sets the non-bonded cut-off to 12 A. Furthermore, the `0.0 1.0 1.0` numbers in the `special_bonds` command indicate scaling of 1-2, 1-3 and 1-4 interactions. You can read more about pair styles [here](http://lammps.sandia.gov/doc/pair_style.html)
 
 The bond style will be a simple harmonic function. 
 
