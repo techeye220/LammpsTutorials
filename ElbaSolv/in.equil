@@ -2,7 +2,8 @@ units real
 
 # Setting up atom and pair_style
 atom_style hybrid molecular dipole sphere
-pair_style lj/sf/dipole/sf 0.0 1.0 1.0 12.0
+pair_style lj/sf/dipole/sf 12.0
+special_bonds lj/coul 0.0 1.0 1.0
 
 # Read in configuration and force field information
 read_data data.box_elba
