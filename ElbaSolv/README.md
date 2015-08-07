@@ -25,7 +25,7 @@ We will create this box with *tleap* from the AmberTools
 and then we can create it to a CG representation with the *aa2cg.py* script. Write down the box dimensions that *tleap* writes out.
 
     sed -i "s/O  /OH2/" box.pdb
-    python2.7 $SCRIPTS/Lammps/aa2cg.py -f box.pdb -o box_elba -i forcefield.elba -b 26.782 27.009 26.192
+    python2.7 $SCRIPTS/Lammps/aa2cg.py box.pdb -o box_elba -i forcefield.elba -b 26.782 27.009 26.192
     
 this will create *box_elba.pdb* that you can use to visualize the system and *data.box_elba* that is the configuration+topology input to lammps. 
 
