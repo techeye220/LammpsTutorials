@@ -36,10 +36,10 @@ fix		integrate all nve/sphere update dipole/dlm
 fix 	thermo all langevin 303 303 1000 9 omega yes zero yes
 fix     removeMomentum all momentum 100 linear 1 1 1
 
-# Perform a 50 ps simulation in the NVT ensemble
+# Perform a 70 ps simulation in the NVT ensemble
 run		5000
 
-# Turn on a barostat and perform a 500 ps simulation in the NPT ensemble
+# Turn on a barostat and perform a 700 ps simulation in the NPT ensemble
 fix		baro all press/berendsen aniso 1 1 1000 couple xy modulus 21740
 run		50000
 
@@ -47,20 +47,21 @@ run		50000
 # Now we will do production, so let's turn on some output
 
 # Density profiles
-fix 	numDensLip lip ave/spatial 2 50000 1000000 z center 1 &
-		density/number units box file numDensLip.dat
-fix 	numDensWat wat ave/spatial 2 50000 1000000 z center 1 &
-		density/number units box file numDensWat.dat
-fix 	numDensChol chol ave/spatial 2 50000 1000000 z center 1 &
-		density/number units box file numDensChol.dat
-fix 	numDensPhos phos ave/spatial 2 50000 1000000 z center 1 &
-		density/number units box file numDensPhos.dat
-fix 	numDensGly gly ave/spatial 2 50000 1000000 z center 1 &
-		density/number units box file numDensGly.dat
-fix 	numDensEst est ave/spatial 2 50000 1000000 z center 1 &
-		density/number units box file numDensEst.dat
-fix 	numDensTail tail ave/spatial 2 50000 1000000 z center 1 &
-		density/number units box file numDensTail.dat
+compute chunkLip lip chunk/atom bin/1d z center 1 units box
+fix numDensLip lip ave/chunk 2 50000 1000000 chunkLip density/number file numDensLip.dat
+compute chunkWat wat chunk/atom bin/1d z center 1 units box
+fix numDensWat wat ave/chunk 2 50000 1000000 chunkWat density/number file numDensWat.dat
+compute chunkChol chol chunk/atom bin/1d z center 1 units box
+fix numDensChol chol ave/chunk 2 50000 1000000 chunkChol density/number file numDensChol.dat
+compute chunkPhos phos chunk/atom bin/1d z center 1 units box
+fix numDensPhos phos ave/chunk 2 50000 1000000 chunkPhos density/number file numDensPhos.dat
+compute chunkGly gly chunk/atom bin/1d z center 1 units box
+fix numDensGly gly ave/chunk 2 50000 1000000 chunkGly density/number file numDensGly.dat
+compute chunkEst est chunk/atom bin/1d z center 1 units box
+fix numDensEst est ave/chunk 2 50000 1000000 chunkEst density/number file numDensEst.dat
+compute chunkTail tail chunk/atom bin/1d z center 1 units box
+fix numDensTail tail ave/chunk 2 50000 1000000 chunkTail density/number file numDensTail.dat
+
 
 # compute and average area pear lipid (APL):
 variable	xyArea equal lx*ly/(${nLips}/2)
@@ -74,5 +75,5 @@ fix 		boxVol all ave/time 1 1 2 v_boxVol file vpl.dat
 restart         500 restart.sim_a restart.sim_b
 dump            dumpdcd all dcd 500 sim.dcd
 
-# Now run a 10 ns production run
+# Now run a 14 ns production run
 run		1000000
