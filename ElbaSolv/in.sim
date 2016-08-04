@@ -29,13 +29,13 @@ velocity all create 298 1234
 # Set up neighbor list and timestep
 neighbor 1 bin
 neigh_modify every 1 delay 0 check yes
-timestep 10.0
+timestep 14.0
 
 # Set up integrator, thermostat and barostat
-fix integrator all nve/sphere update dipole
+fix integrator all nve/sphere update dipole/dlm
 fix thermostat all langevin 298 298 1000 9 omega yes zero yes
 fix zeroMom    all momentum 500 linear 1 1 1
-fix barostat   all press/berendsen iso 1.0 1.0 100 modulus 21740
+fix barostat   all press/berendsen iso 1.0 1.0 5000 modulus 21740
 # Keep the central atom slightly restrain to the centre of the box
 fix fixbeads   centralwat spring/self 5.0 xyz
 
@@ -58,11 +58,10 @@ variable dPotEngSS equal c_PotEngSS*v_dfL/v_fL
 fix dPotEngSS all ave/time ${Ne} ${Nr} ${Nf} v_L v_dPotEngSS file out.dPotEngSS
 
 # Modify output
-thermo_style custom step temp press pe vol 
+thermo_style custom step temp press pe vol
 thermo_modify flush yes
 thermo ${Nf}
 dump  dumpdcd all dcd ${Nf} sim.dcd
 
 # Run the simulation
 run ${Nruntot}
-
